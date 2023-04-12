@@ -82,4 +82,33 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Debes introducir el codigo", Toast.LENGTH_LONG).show();
         }
     }
+    //metodo de modificar
+    public void Modificar (View view){
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, NombreBaseDatos, null, 1);
+        SQLiteDatabase BaseDeDatos = admin.getWritableDatabase();
+
+        String codigo = txt_codigo.getText().toString();
+        String nombre = txt_nombre.getText().toString();
+        String autor = txt_autor.getText().toString();
+        String editorial = txt_editorial.getText().toString();
+
+        if (!codigo.isEmpty() && !nombre.isEmpty() && !autor.isEmpty() && !editorial.isEmpty()){
+            ContentValues registro = new ContentValues();
+
+            registro.put("codigo", codigo);
+            registro.put("descripcion", descripcion);
+            registro.put("precio", precio);
+            // en el otro teniamos INSET pero aqui puede ser que solo modifiquemos una cosa y no todas
+            int cantidad = BaseDeDatos.update("articulos", registro, "codigo=" + codigo, null);
+            BaseDeDatos.close();
+
+            if (cantidad == 1){
+                Toast.makeText(this, "El articulo se ha modificado", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this, "El articulo no exite", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(this, "debes rellenar los campos", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
