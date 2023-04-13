@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         if(!codigo.isEmpty()){
             Cursor fila = BaseDeDatos.rawQuery("select nombre, autor, editorial from libreria where codigo =" + codigo, null);
 
-            // al devolver un array es [0,1] proque siempre inicia en 0 el array
+
             if (fila.moveToFirst()){
                 txt_nombre.setText(fila.getString(0));
                 txt_autor.setText(fila.getString(1));
@@ -96,13 +96,18 @@ public class MainActivity extends AppCompatActivity {
             ContentValues registro = new ContentValues();
 
             registro.put("codigo", codigo);
-            registro.put("descripcion", descripcion);
-            registro.put("precio", precio);
-            // en el otro teniamos INSET pero aqui puede ser que solo modifiquemos una cosa y no todas
-            int cantidad = BaseDeDatos.update("articulos", registro, "codigo=" + codigo, null);
+            registro.put("nombre", nombre);
+            registro.put("autor", autor);
+            registro.put("editorial", editorial);
+
+            int cantidad = BaseDeDatos.update("libreria", registro, "codigo=" + codigo, null);
             BaseDeDatos.close();
 
             if (cantidad == 1){
+                txt_codigo.setText("");
+                txt_nombre.setText("");
+                txt_autor.setText("");
+                txt_editorial.setText("");
                 Toast.makeText(this, "El articulo se ha modificado", Toast.LENGTH_SHORT).show();
             }else {
                 Toast.makeText(this, "El articulo no exite", Toast.LENGTH_SHORT).show();
@@ -110,5 +115,34 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Toast.makeText(this, "debes rellenar los campos", Toast.LENGTH_SHORT).show();
         }
+    }
+    public void Eliminar (View view) {
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, NombreBaseDatos, null, 1);
+        SQLiteDatabase BaseDeDatos = admin.getWritableDatabase();
+
+        String codigo = txt_codigo.getText().toString();
+
+        if(!codigo.isEmpty()){
+            int cantidad = BaseDeDatos.delete("libreria", "codigo=" + codigo, null);
+            BaseDeDatos.close();
+
+            if(cantidad == 1){
+                txt_codigo.setText("");
+                txt_nombre.setText("");
+                txt_autor.setText("");
+                txt_editorial.setText("");
+                Toast.makeText(this, "el articulo se ha borrado", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this, "no exite", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(this, "desbes introducir el codigo del articulo", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void Limpiar (View view){
+        txt_codigo.setText("");
+        txt_nombre.setText("");
+        txt_autor.setText("");
+        txt_editorial.setText("");
     }
 }

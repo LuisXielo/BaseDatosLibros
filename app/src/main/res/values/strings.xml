@@ -8,4 +8,5 @@
     <string name="btn_modificar">Modificar libro</string>
     <string name="btn_buscar">Buscar libro</string>
     <string name="btn_eliminar">Eliminar libro</string>
+    <string name="btn_limpiar">Limpiar campos</string>
 </resources>
